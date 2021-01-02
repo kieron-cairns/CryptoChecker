@@ -30,6 +30,7 @@ const App = ({ children }) => (
 );
 
 //Here brother, you will get docuemnt is not deifned error, things are different in next.js so i'm figuring this out first 
+// In next.js I do not think we render like this 
 
 // TODO: Switch to https://github.com/palmerhq/the-platform#stylesheet when it will be stable
 const styleLink = document.createElement("link");
