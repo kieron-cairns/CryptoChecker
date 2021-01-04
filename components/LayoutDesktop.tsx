@@ -1,6 +1,8 @@
 import React from 'react'
 import { Header, Icon, Image, Menu, Segment, Sidebar } from 'semantic-ui-react'
 
+//TODO : Add Inline styles 
+
 const LayoutDesktop = () => (
   <Sidebar.Pushable as={Segment}>
     <Sidebar
