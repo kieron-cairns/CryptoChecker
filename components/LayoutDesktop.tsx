@@ -11,23 +11,29 @@ const LayoutDesktop = () => (
       vertical
       visible
       width='thin'
+      style={{minHeight: "100vh"}}
+      
     >
       <Menu.Item as='a'>
         <Icon name='home' />
-        Home
+        Bitcoin
       </Menu.Item>
       <Menu.Item as='a'>
         <Icon name='gamepad' />
-        Games
+        Ethereum
       </Menu.Item>
       <Menu.Item as='a'>
         <Icon name='camera' />
-        Channels
+        Litecoin
+      </Menu.Item>
+      <Menu.Item as='a'>
+        <Icon name='camera' />
+        XRP
       </Menu.Item>
     </Sidebar>
 
     <Sidebar.Pusher>
-      <Segment basic>
+      <Segment style={{minHeight: "100vh"}} basic>
         <Header as='h3'>Application Content</Header>
         <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />
       </Segment>

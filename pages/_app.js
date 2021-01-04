@@ -1,5 +1,5 @@
 import '../styles/globals.css'
-import LayoutDesktop from "../components/LayoutDesktop"
+import '../styles/semantic.min.css'
 
 function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />
