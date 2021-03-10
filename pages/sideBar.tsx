@@ -1,5 +1,6 @@
 import React from 'react'
 import { Header, Icon, Image, Menu, Segment, Sidebar } from 'semantic-ui-react'
+import BitcoinPage from './btc-page'
 
 const SidebarExampleVisible = () => (
     <Sidebar.Pushable as={Segment}>
@@ -27,10 +28,11 @@ const SidebarExampleVisible = () => (
         </Sidebar>
 
         <Sidebar.Pusher>
-            <Segment basic>
+            {/* <Segment basic>
                 <Header as='h3'>Application Content</Header>
                 <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />
-            </Segment>
+            </Segment> */}
+            <BitcoinPage></BitcoinPage>
         </Sidebar.Pusher>
     </Sidebar.Pushable>
 )
