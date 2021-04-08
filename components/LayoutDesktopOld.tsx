@@ -6,14 +6,11 @@ import DisplayPage from './DisplayPage';
 
 //TODO : Add Inline styles 
 
-const LayoutDesktop: FunctionComponent = ({
-  children,
-}) => {
+var test = null;
 
-  const router = useRouter()
-  const { id } = router.query
+const LayoutDesktop = () => (
 
-  return(
+
   <Sidebar.Pushable as={Segment}>
     <Sidebar
       as={Menu}
@@ -38,7 +35,7 @@ const LayoutDesktop: FunctionComponent = ({
       </Menu.Item>
       <Menu.Item as='a'>
         <Icon name='gamepad' />
-        <Link href="/page/[id]" as="/page/first">
+        <Link href="dashboard/#eth-page">
         Ethereum
         </Link>      
       </Menu.Item>
@@ -53,13 +50,15 @@ const LayoutDesktop: FunctionComponent = ({
     <Sidebar.Pusher>
       <Segment style={{minHeight: "100vh"}} basic>
 
-     {children}
+      <DisplayPage></DisplayPage>
         
       </Segment>
+
+      {/* {props.children} */}
     
     </Sidebar.Pusher>
   </Sidebar.Pushable>
-  )
-}
+  
+)
 
 export default LayoutDesktop
