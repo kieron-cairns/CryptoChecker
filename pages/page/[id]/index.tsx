@@ -9,7 +9,7 @@ const Page = () => {
 
   return (
     <>
-      <LayoutDesktop />
+      {/* <LayoutDesktop /> */}
       <h1>Post: {id}</h1>
       <ul>
         <li>
