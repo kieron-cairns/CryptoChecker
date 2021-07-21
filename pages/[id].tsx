@@ -1,67 +1,44 @@
 import LayoutDesktop from "../components/LayoutDesktop";
 import Link from 'next/link'
+import useSWR from "swr";
+import { useRouter } from 'next/router'
 
 
-export const getStaticPaths = async () => {
 
-  //Does not work with this json url
-  // const res = await fetch('https://jsonplaceholder.typicode.com/users')
+const Details = (initialData) => {
+  const router = useRouter()
+  const { id } = router.query
 
-  //fetch the coins from the api
-  const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin%2C%20ethereum%2C%20ripple&order=market_cap_desc&per_page=100&page=1&sparkline=false')
-  const data = await res.json();
-  //return the id of each coin that has been retrived
-  const paths = data.map(coin => {
-    return {
-      params: {id: coin.id}
-    }
-  })
+  const { data: coin,  } = useSWR("/coins/markets?vs_currency=usd&ids=" + id + "%2C%20&order=market_cap_desc&per_page=100&page=1&sparkline=false/", {
+    initialData: initialData.currentCoin,
+    refreshInterval: 1000 * 60 // refresh every 60 seconds
+  });
 
-  return {
-    paths,
-    fallback: false
-  }
-}
+  const { data: allCoins, } = useSWR("/coins/markets?vs_currency=usd&ids=bitcoin%2C%20ethereum%2C%20ripple&order=market_cap_desc&per_page=100&page=1&sparkline=false", {
+    initialData: initialData.allCoins,
+  });
 
-export const getStaticProps = async (context) => {
-  const id = context.params.id; 
-
-  //Does not work with this json url
-  // const res = await fetch('https://jsonplaceholder.typicode.com/users/' + id )
+  console.log("COIN", coin);
   
-  //Get info for each coin with passed the passed id
-  const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=' + id + '%2C%20&order=market_cap_desc&per_page=100&page=1&sparkline=false/')
-  const data = await res.json();
+  //Show loading state if data is not fetched
+  if (!coin || !allCoins) return <div>Loading...</div>
 
-  //This fetch will get the coins for bitcoin, ethereum and xrp. These will be displayed in the sidebar.
-  const res2 = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin%2C%20ethereum%2C%20ripple&order=market_cap_desc&per_page=100&page=1&sparkline=false')
-  const data2 = await res2.json();
-
-
-  console.log(data2)
-
-  //return the siidebar attributes and the selected page attributes
-  return {
-    props: {coin: data, coin2: data2}
- 
-  }
-}
-
-const Details = ({ coin, coin2 }) => {
-  console.log(coin[0].name)  
   return(
      
       <div>
         <LayoutDesktop
-        //Pass the name of the coin to the header of the page (here a function can be used to display further information for the page )
-        children={<div><h1>{coin[0].name} Page</h1></div>}
-        apilist={coin2}
-        />
+        apilist={allCoins}
+        >
+          {/* Pass the name of the coin to the header of the page (here a function can be used to display further information for the page ) */}
+          <div>
+            <h1>{coin[0].name} Page</h1>
+            {/* Data output example */}
+            <h3>Current price: {coin[0].current_price}</h3>
+            <h3>Last updated: {coin[0].last_updated}</h3>
+
+          </div>
+        </LayoutDesktop>
       </div>
-
-  
-
-
 
 
       // <LayoutDesktop
@@ -73,6 +50,26 @@ const Details = ({ coin, coin2 }) => {
 
       // />
     )
+}
+
+Details.getInitialProps = async ({req, query}) => {  
+  //run only on initial page load
+  if (!req) return {};
+
+  const {id} = query; 
+
+  //Does not work with this json url
+  // const res = await fetch('https://jsonplaceholder.typicode.com/users/' + id )
+
+  //This fetch will get the coins for bitcoin, ethereum and xrp. These will be displayed in the sidebar.
+  const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin%2C%20ethereum%2C%20ripple&order=market_cap_desc&per_page=100&page=1&sparkline=false')
+  const allCoins = await res.json();
+
+  //find selected coin from allCoins
+  const currentCoin = [allCoins.find(coin => coin.id === id)]
+
+  //return the siidebar attributes and the selected page attributes
+  return {currentCoin, allCoins}
 }
 
 export default Details;
