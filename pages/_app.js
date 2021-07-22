@@ -5,6 +5,8 @@ import { SWRConfig } from "swr";
 
 function MyApp({ Component, pageProps }) {
   return (
+
+    //Global Config for SWR - referenced from https://swr.vercel.app/docs/global-configuration
     <SWRConfig
       value={{
         //set default fetcher

@@ -14,10 +14,9 @@ const Test = props => {
   )
 }
 
-
-
 const App = (initialData) => {
   
+  //useSWR - code referenced from https://codesandbox.io/s/swr-0n32d?from-embed
   const { data: allCoins } = useSWR("/coins/markets?vs_currency=usd&ids=bitcoin%2C%20ethereum%2C%20ripple&order=market_cap_desc&per_page=100&page=1&sparkline=false", {
     initialData: initialData.coins,
   });

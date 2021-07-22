@@ -4,29 +4,32 @@ import useSWR from "swr";
 import { useRouter } from 'next/router'
 
 
-
 const Details = (initialData) => {
   const router = useRouter()
   const { id } = router.query
 
+
+  //useSWR - code referenced from https://codesandbox.io/s/swr-0n32d?from-embed
   const { data: coin,  } = useSWR("/coins/markets?vs_currency=usd&ids=" + id + "%2C%20&order=market_cap_desc&per_page=100&page=1&sparkline=false/", {
     initialData: initialData.currentCoin,
     refreshInterval: 1000 * 60 // refresh every 60 seconds
   });
 
+    //useSWR - code referenced from https://codesandbox.io/s/swr-0n32d?from-embed
   const { data: allCoins, } = useSWR("/coins/markets?vs_currency=usd&ids=bitcoin%2C%20ethereum%2C%20ripple&order=market_cap_desc&per_page=100&page=1&sparkline=false", {
     initialData: initialData.allCoins,
   });
 
   console.log("COIN", coin);
   
-  //Show loading state if data is not fetched
+  //Show loading state if coin API list or allCoins API list are not defined
   if (!coin || !allCoins) return <div>Loading...</div>
 
   return(
      
       <div>
         <LayoutDesktop
+        //Pass the API list to LayoutDesktop as child
         apilist={allCoins}
         >
           {/* Pass the name of the coin to the header of the page (here a function can be used to display further information for the page ) */}
