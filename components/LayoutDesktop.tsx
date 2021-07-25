@@ -1,7 +1,6 @@
 import React, { Children, FunctionComponent } from 'react'
-import { Header, Icon, Image, Menu, Segment, Sidebar } from 'semantic-ui-react'
+import { Icon, Menu, Segment, Sidebar } from 'semantic-ui-react'
 import Link from "next/link";
-import { useRouter } from 'next/router'
 
 //TODO : Add Inline styles 
 
@@ -49,10 +48,8 @@ const LayoutDesktop = ({
          {children}      
           </Segment>  
         </Sidebar.Pusher>
-      </Sidebar.Pushable>
-      
+      </Sidebar.Pushable>      
   )
 }
-
 
 export default LayoutDesktop

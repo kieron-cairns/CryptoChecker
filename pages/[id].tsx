@@ -1,5 +1,4 @@
 import LayoutDesktop from "../components/LayoutDesktop";
-import Link from 'next/link'
 import useSWR from "swr";
 import { useRouter } from 'next/router'
 
@@ -42,16 +41,6 @@ const Details = (initialData) => {
           </div>
         </LayoutDesktop>
       </div>
-
-
-      // <LayoutDesktop
-      
-      // children={<div><h1>Coin Page</h1><h2>
-      //   {coin[0].name}</h2></div>}
-
-      //   tester={coin2}
-
-      // />
     )
 }
 
