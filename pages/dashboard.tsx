@@ -9,6 +9,8 @@ const App = (initialData) => {
     initialData: initialData.coins,
   });
 
+
+
   useEffect(() => {
     if (allCoins) {
       //force allCoins to cache. (without revalidating)
@@ -25,9 +27,11 @@ const App = (initialData) => {
     }
   }, [allCoins, mutate])
 
+  
+  
+
   //show loading state if allCoins is undefined
   if (!allCoins) return <div>Loading...</div>
-
   return(
     <div> 
       <LayoutDesktop
