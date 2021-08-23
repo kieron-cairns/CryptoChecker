@@ -15,11 +15,18 @@ function timeConverter(UNIX_timestamp){
   return time;
 }
 
+
+
 const Details = (initialData) => {
   const router = useRouter()
   const { id } = router.query
 
-
+  const fetcher = async () => {
+    const response = await fetch("https://api.coingecko.com/api/v3/coins/" + id + "/market_chart/range?vs_currency=usd&from=1625228223&to=1627910223")
+    const data = await response.json()
+    return data;
+  }
+  
   //Each data retreival is chached and retireved via the client side.
 
   //useSWR - code referenced from https://codesandbox.io/s/swr-0n32d?from-embed
@@ -28,7 +35,7 @@ const Details = (initialData) => {
   
   const { data: coin,  } = useSWR("/coins/markets?vs_currency=usd&ids=" + id + "%2C%20&order=market_cap_desc&per_page=100&page=1&sparkline=false/", {
     initialData: initialData.currentCoin,
-    refreshInterval: 1000 * 60 // refresh every 60 seconds
+    refreshInterval: 1000 * 10 // refresh every 60 seconds
   });
 
     //useSWR - code referenced from https://codesandbox.io/s/swr-0n32d?from-embed
@@ -41,16 +48,16 @@ const Details = (initialData) => {
   //   initialData: initialData.allCoins2,
   // });
 
-  const { data: coin2,  } = useSWR("/coins/" + id + "/market_chart/range?vs_currency=usd&from=1625228223&to=1627910223", {
-    // initialData: initialData.currentCoin2,
-    refreshInterval: 1000 * 60 // refresh every 60 seconds
+  const { data: coinPrices, } = useSWR("/coins/" + id + "/market_chart/range?vs_currency=usd&from=1625228223&to=1627910223", {
+    initialData: initialData.currentCoin2,
+    refreshInterval: 1000 * 0.01 // refresh every 60 seconds
   });
-
-
+  
+  const {data: data, error,  } = useSWR('lol', fetcher);
 
   //Show loading state if coin API list or allCoins API list are not defined
-  if (!coin || !coin2 || !allCoins) return <div>Loading...</div>
-
+  if (!coin || !coinPrices || !allCoins || !data) return <div>Loading...</div>
+  if(error) return <div>Error</div>
   return(
 
       <div>
@@ -61,8 +68,8 @@ const Details = (initialData) => {
           {/* Pass the name of the coin to the header of the page (here a function can be used to display further information for the page ) */}
           <div>
             <h1>{coin[0].name} Page</h1>
-            <h3>{coin2.prices[0][1]}</h3>
-
+            <h3>{data.prices[0][1]}</h3>
+            {/* <h3>{coin2.prices}</h3> */}
 
             {/* Data output example */}
             <h3>Current price: {coin[0].current_price}</h3>
@@ -85,15 +92,18 @@ Details.getInitialProps = async ({req, query}) => {
   const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin%2C%20ethereum%2C%20ripple&order=market_cap_desc&per_page=100&page=1&sparkline=false')
   const allCoins = await res.json();
 
- // const res2 = await fetch('https://api.coingecko.com/api/v3/coins/' + id + '/market_chart/range?vs_currency=usd&from=1625224105&to=1627906105')
-  // const coinPrices = await res2.json();
+const res2 = await fetch('https://api.coingecko.com/api/v3/coins/' + id + '/market_chart/range?vs_currency=usd&from=1625224105&to=1627906105')
+const coinPrices = await res2.json();
   //find selected coin from allCoins
+  
   const currentCoin = [allCoins.find(coin => coin.id === id)]
-  const currentCoin2 = [allCoins.find(coin => coin.id === id)]
+
+  // console.log(currentCoin2)
 
 
   //return the siidebar attributes and the selected page attributes
-  return {currentCoin, allCoins, currentCoin2}
+  // return {currentCoin, allCoins, currentCoin2}
+  return {currentCoin, allCoins, coinPrices}
 }
 
 export default Details;
