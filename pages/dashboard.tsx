@@ -9,28 +9,45 @@ const App = (initialData) => {
     initialData: initialData.coins,
   });
 
+  
 
+  const { data: coinPrices } = useSWR("/coins/markets?vs_currency=usd&ids=bitcoin%2C%20ethereum%2C%20ripple&order=market_cap_desc&per_page=100&page=1&sparkline=false", {
+    initialData: initialData.coins,
+  });
 
   useEffect(() => {
-    if (allCoins) {
-      //force allCoins to cache. (without revalidating)
-      mutate(
-        "/coins/markets?vs_currency=usd&ids=bitcoin%2C%20ethereum%2C%20ripple&order=market_cap_desc&per_page=100&page=1&sparkline=false", allCoins, false
-      );
+    // if (allCoins) {
+    //   //force allCoins to cache. (without revalidating)
+    //   mutate(
+    //     "/coins/markets?vs_currency=usd&ids=bitcoin%2C%20ethereum%2C%20ripple&order=market_cap_desc&per_page=100&page=1&sparkline=false", allCoins, false
+    //   );
 
-      //cache coins separately. (without revalidating)
-      allCoins.forEach(coin => {
-        mutate(
-          "/coins/markets?vs_currency=usd&ids=" + coin.id + "%2C%20&order=market_cap_desc&per_page=100&page=1&sparkline=false/", [coin], false
-        );
-      });
-    }
+    //   //cache coins separately. (without revalidating)
+    //   allCoins.forEach(coin => {
+    //     mutate(
+    //       "/coins/markets?vs_currency=usd&ids=" + coin.id + "%2C%20&order=market_cap_desc&per_page=100&page=1&sparkline=false/", [coin], false
+    //     );
+    //   });
+    // }
   }, [allCoins, mutate])
 
-  
-  
+  useEffect(() => {
+    // if (coinPrices) {
+    //   //force allCoins to cache. (without revalidating)
+    //   mutate(
+    //     "/coins/markets?vs_currency=usd&ids=bitcoin%2C%20ethereum%2C%20ripple&order=market_cap_desc&per_page=100&page=1&sparkline=false", coinPrices, false
+    //   );
 
-  //show loading state if allCoins is undefined
+    //   //cache coins separately. (without revalidating)
+    //   coinPrices.forEach(coin2 => {
+    //     mutate(
+    //       "/coins/" + coin2.id + "/market_chart/range?vs_currency=usd&from=1625228223&to=1627910223", [coin2], false
+    //     );
+    //   });
+    // }
+  }, [coinPrices, mutate])
+  
+ //show loading state if allCoins is undefined
   if (!allCoins) return <div>Loading...</div>
   return(
     <div> 
@@ -47,13 +64,12 @@ const App = (initialData) => {
 App.getInitials = async ({req}) => {
 
   //run only on initial page load
-  if (!req) return {};
+  // if (!req) return {};
 
-  //This fetch will get the coins for bitcoin, ethereum and xrp. These will be displayed in the sidebar.
-  const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin%2C%20ethereum%2C%20ripple&order=market_cap_desc&per_page=100&page=1&sparkline=false')
-  const data = await res.json();
+  // const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin%2C%20ethereum%2C%20ripple&order=market_cap_desc&per_page=100&page=1&sparkline=false')
+  // const data = await res.json();
 
-  return {coins: data}
+  // return {coins: data}
 }
 
 export default App;
